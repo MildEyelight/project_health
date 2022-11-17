@@ -8,6 +8,7 @@ onnxruntime
 Linux Firefox 
 
 ## Usage
-input id and password in run.sh
+input id and password in cron.sh
+
 bash main.sh
 (the script will run randomly during 7:00~8:00)
