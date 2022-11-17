@@ -14,4 +14,7 @@ function randsleep(){
 export PATH=$PATH:$pwd
 randsleep
 cd /home/liyh/SYSU-HealthReport/
-#nohup python -u /home/liyh/SYSU-HealthReport/jksb_sysu.py >> /home/liyh/SYSU-HealthReport/nohup.out
+#填入账号密码
+netid=""
+password=""
+nohup python -u /home/liyh/SYSU-HealthReport/main.py --netid ${netid} --password ${password}>> /home/liyh/SYSU-HealthReport/nohup.out

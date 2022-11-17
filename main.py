@@ -13,8 +13,9 @@ opts = webdriver.FirefoxOptions()
 opts.add_argument("--headless")
 driver = webdriver.Firefox(service=Service("./geckodriver"),options=opts)
 print("初始化selenium driver完成")
-netid = parser.netid
-password = parser.password
+args = parser.parse_args()
+netid = args.netid
+password = args.password
 # bot_token = os.environ['TG_BOT_TOKEN']
 # chatid = os.environ['TG_CHATID']
 
