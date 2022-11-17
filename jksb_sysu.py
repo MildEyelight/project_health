@@ -4,12 +4,20 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.service import Service
 from util import recognize
 from retrying import retry
+import argparse
 
-driver = webdriver.Firefox(service=Service(f"{os.environ['GITHUB_ACTION_PATH']}/geckodriver.exe"))
+parser = argparse.ArgumentParser()
+parser.add_argument('--netid',type=str)
+parser.add_argument('--password',type=str)
+opts = webdriver.FirefoxOptions()
+opts.add_argument("--headless")
+driver = webdriver.Firefox(service=Service("./geckodriver"),options=opts)
+#driver = webdriver.Chrome(service=Service("./chromedriver"))
 print("初始化selenium driver完成")
 
-bot_token = os.environ['TG_BOT_TOKEN']
-chatid = os.environ['TG_CHATID']
+# bot_token = os.environ['TG_BOT_TOKEN']
+# chatid = os.environ['TG_CHATID']
+
 
 
 # 失败后随机 1-3s 后重试，最多 10 次
@@ -17,12 +25,11 @@ chatid = os.environ['TG_CHATID']
 def login():
     print("访问登录页面")
     driver.get("https://cas.sysu.edu.cn/cas/login")
-    time.sleep(10)
+    time.sleep(2)
 
     print("读取用户名密码")
-    netid = os.environ['NETID']
-    password = os.environ['PASSWORD']
-
+    netid= "Liyh328"
+    password="Lee0610(yh)"
     print("输入用户名密码")
     driver.find_element(By.XPATH,'//*[@id="username"]').send_keys(netid)
     driver.find_element(By.XPATH,'//*[@id="password"]').send_keys(password)
@@ -46,7 +53,7 @@ def login():
 def jksb():
     print('访问健康申报页面')
     driver.get("http://jksb.sysu.edu.cn/infoplus/form/XNYQSB/start")
-    time.sleep(15)
+    time.sleep(2)
     try:
         number = driver.find_element(By.XPATH, '//*[@id="title_description"]').text
         print('打开健康申报成功')
@@ -77,14 +84,16 @@ if __name__ == "__main__":
     except:
         result = '健康申报失败'
         print(result)
+
     driver.quit()
 
-    # 判断是否发送通知
-    if bot_token in ['False', '']:
-        pass
-    elif bot_token.startswith('SCT'):
-        from util import wx_send
-        wx_send(bot_token, result)
-    else:
-        from util import tgbot_send
-        tgbot_send(bot_token, chatid, result)
+    #判断是否发送通知
+    
+    # if bot_token in ['False', '']:
+    #     pass
+    # elif bot_token.startswith('SCT'):
+    #     from util import wx_send
+    #     wx_send(bot_token, result)
+    # else:
+    #     from util import tgbot_send
+    #     tgbot_send(bot_token, chatid, result)

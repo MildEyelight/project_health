@@ -22,13 +22,13 @@ def getCaptcha(filePath = 'captcha.jpg'):
         # 识别
         key_map={48: '0', 49: '1', 50: '2', 51: '3', 52: '4', 53: '5', 54: '6', 55: '7', 56: '8', 57: '9',
          97: 'a', 98: 'b', 99: 'c', 100: 'd', 101: 'e', 102: 'f', 103: 'g', 104: 'h', 105: 'i', 106: 'j', 107: 'k', 108: 'l', 109: 'm', 110: 'n', 111: 'o', 112: 'p', 113: 'q', 114: 'r', 115: 's', 116: 't', 117: 'u', 118: 'v', 119: 'w', 120: 'x', 121: 'y', 122: 'z'}
-        img_file=Image.open(f"{os.environ['GITHUB_ACTION_PATH']}/%s" %filePath)
+        img_file=Image.open(f"./%s" %filePath)
         img_file=img_file.convert("RGBA")
         inputs=np.array(img_file)
         inputs=inputs.ravel()
         inputs=convert2array(inputs,90,32)
         inputs=np.array(inputs)
-        session1=onnxruntime.InferenceSession(f"{os.environ['GITHUB_ACTION_PATH']}/cnn.onnx")
+        session1=onnxruntime.InferenceSession(f"./cnn.onnx")
         input_name = session1.get_inputs()
         pred=session1.run([],{input_name[0].name:inputs.astype(np.float32).reshape(1,3,90,32)})
         pred=pred[0].flatten()
@@ -53,15 +53,15 @@ def recognize(driver):
     captcha_url = 'https://cas.sysu.edu.cn/cas/captcha.jsp'
     response = session.get(captcha_url, headers=headers)
     sleep(5)
-    with open(f"{os.environ['GITHUB_ACTION_PATH']}/captcha.jpg", "wb") as f:
+    with open(f"./captcha.jpg", "wb") as f:
         f.write(response.content)
     sleep(3)
     captcha = getCaptcha()
     sleep(1.5)
     print(        'captcha is %s' % captcha)
     #判断文件是否存在
-    if(os.path.exists(f"{os.environ['GITHUB_ACTION_PATH']}/captcha.jpg")):
-        os.remove(f"{os.environ['GITHUB_ACTION_PATH']}/captcha.jpg")
+    if(os.path.exists(f"./captcha.jpg")):
+        os.remove(f"./captcha.jpg")
         print("移除目录下文件")
     else:
         print("要删除的文件不存在！")
